@@ -4,6 +4,24 @@ import Hero from "./components/Hero";
 import SectionReveal from "./components/SectionReveal";
 import ExperienceScroll from "./components/ExperienceScroll";
 
+const stayBenefits = [
+  {
+    title: "Curated\nLuxury Stays",
+    description:
+      "Choose from a unique collection of the most decorated hotels in the world, with selections located in the top luxury travel destinations globally.",
+  },
+  {
+    title: "Book With Points",
+    description:
+      "Use the points you’ve earned with Velto to book exceptional stays at some of the world’s most sought-after hotels, with elevated redemption rates across luxury properties and destinations globally.",
+  },
+  {
+    title: "Find a Room in Seconds",
+    description:
+      "Booking with Atlas is a breeze—discover the destination, hotel, and room that’s just right for you inside Atlas app, and book your stay in (literal) seconds.",
+  },
+];
+
 const page = () => {
   return (
     <div>
@@ -35,8 +53,24 @@ const page = () => {
       </SectionReveal>
 
       <ExperienceScroll />
-      <SectionReveal className="relative flex min-h-screen w-full items-center justify-center px-6 text-center text-white">
-        hff
+      <SectionReveal className="relative w-full px-6 py-24 text-white sm:py-32">
+        <div className="mx-auto w-full max-w-[45rem]">
+          {stayBenefits.map((benefit) => (
+            <article
+              key={benefit.title}
+              className="grid gap-5 border-t border-white/15 py-8 sm:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] sm:gap-10 sm:py-16"
+            >
+              <h2 className="whitespace-pre-line text-2xl font-medium leading-tight tracking-tight text-white sm:text-[1.75rem]">
+                {benefit.title}
+              </h2>
+              <p className="max-w-[32rem] text-lg leading-tight tracking-tight text-[#858585] sm:text-[1.55rem]">
+                {benefit.description}
+              </p>
+            </article>
+          ))}
+          <div className="border-t border-white/15 mb-8" />
+          <div className="w-full aspect-video rounded-4xl bg-white/10 mt-8 "></div>
+        </div>
       </SectionReveal>
     </div>
   );

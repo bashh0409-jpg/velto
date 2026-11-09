@@ -4,6 +4,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useRef } from "react";
+import MuxBackgroundVideo from "./MuxBackgroundVideo";
 
 type Experience = {
   number: string;
@@ -12,13 +13,14 @@ type Experience = {
   description: string;
   alt: string;
 } & (
-  | { image: string; video?: never }
-  | { video: string; image?: never }
+  | { type: "image"; image: string }
+  | { type: "video"; playbackId: string }
 );
 
 const experiences: Experience[] = [
   {
     number: "01",
+    type: "image",
     category: "F1 PADDOCK CLUB",
     title: "Attend today’s most exhilarating\nevents with front-row access.",
     description: "A closer seat to the moments that move you.",
@@ -28,6 +30,7 @@ const experiences: Experience[] = [
   },
   {
     number: "02",
+    type: "image",
     category: "DINING",
     title: "Make room for\nthe unforgettable.",
     description: "The city’s most sought-after tables, ready when you are.",
@@ -36,11 +39,12 @@ const experiences: Experience[] = [
   },
   {
     number: "03",
+    type: "video",
     category: "STAYS",
     title: "Find your own\nkind of extraordinary.",
     description:
       "Thoughtful stays and remarkable rooms, wherever you’re headed.",
-    video: "/stays.mp4",
+    playbackId: process.env.NEXT_PUBLIC_MUX_STAYS_PLAYBACK_ID ?? "",
     alt: "Resort hotel surrounded by greenery",
   },
 ];
@@ -121,25 +125,20 @@ export default function ExperienceScroll() {
           data-experience-panel
           className="relative isolate mx-1 my-1 h-[calc(100svh-8px)] min-h-[36rem] overflow-hidden rounded-xl bg-[#171614] sm:mx-2 sm:my-2 sm:h-[calc(100svh-16px)] sm:rounded-2xl"
         >
-          {experience.video ? (
-            <video
-              data-experience-image
-              aria-hidden="true"
-              className="experience-parallax-image scale-[1.025] object-cover blur-[1.5px]"
-              src={experience.video}
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="metadata"
-            />
-          ) : (
+          {experience.type === "image" ? (
             <div
               data-experience-image
               role="img"
               aria-label={experience.alt}
               className="experience-parallax-image scale-[1.025] bg-cover bg-center blur-[1.5px]"
               style={{ backgroundImage: `url("${experience.image}")` }}
+            />
+          ) : (
+            <MuxBackgroundVideo
+              data-experience-image
+              playbackId={experience.playbackId}
+              className="experience-parallax-image scale-[1.025] object-cover blur-[1.5px]"
+              preload="metadata"
             />
           )}
           <div className="absolute inset-0 bg-black/5" />

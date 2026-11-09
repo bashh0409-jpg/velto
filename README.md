@@ -1,5 +1,23 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Video hosting with Mux
+
+The hero and stays background videos stream from Mux using HLS. Upload the
+original clips to Mux, set each asset's playback policy to **Public**, and copy
+its **Playback ID** (not its Asset ID) into `.env.local`:
+
+```env
+NEXT_PUBLIC_MUX_HERO_PLAYBACK_ID=your_hero_playback_id
+NEXT_PUBLIC_MUX_STAYS_PLAYBACK_ID=your_stays_playback_id
+```
+
+Restart the dev server after changing `.env.local`. Set the same variables in
+your deployment environment before building. Playback IDs are public and are
+embedded in the client bundle; do not put Mux API secrets in these variables.
+`.env.example` is a template only; Next.js does not load it automatically.
+Copy it to `.env.local` for local development and set the variables in your
+deployment environment before building.
+
 ## Getting Started
 
 First, run the development server:

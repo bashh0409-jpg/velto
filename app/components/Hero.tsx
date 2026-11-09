@@ -1,16 +1,13 @@
 import React from 'react'
+import MuxBackgroundVideo from "./MuxBackgroundVideo";
 
 const Hero = () => {
   return (
     <div className="h-screen w-full relative text-center">
       <div className="relative rounded-b-xl w-full h-[90vh] overflow-hidden">
-        <video
+        <MuxBackgroundVideo
+          playbackId={process.env.NEXT_PUBLIC_MUX_HERO_PLAYBACK_ID ?? ""}
           className="absolute inset-0 h-full w-full object-cover"
-          src="HeroVideo.mp4"
-          autoPlay
-          muted
-          loop
-          playsInline
           preload="auto"
         />
 
