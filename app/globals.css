@@ -11,6 +11,7 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-space-mono);
+  --font-serif: var(--font-playfair-display);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -39,6 +40,10 @@ body {
   font-family: var(--font-space-mono);
 }
 
+.play {
+  font-family: var(--font-playfair-display);
+}
+
 .experience-parallax-image {
   position: absolute;
   top: -18%;
@@ -62,4 +67,5 @@ body {
 .experience-scroll-dot.is-active {
   transform: scale(1.15);
   background: white;
+  
 }

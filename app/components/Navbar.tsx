@@ -3,16 +3,33 @@
 import React, { useState, useEffect, useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { QRCodeSVG } from "qrcode.react";
-import Globe from "./Globe";
+import BrandedQRCode from "./BrandedQRCode";
 
 gsap.registerPlugin(useGSAP);
 
 const mobileAppUrl = "https://veyragroup.vercel.app/";
+const appStoreUrl = "https://apps.apple.com/";
+const playStoreUrl = "https://play.google.com/store/apps";
+
+const getPhoneStore = () => {
+  const userAgent = navigator.userAgent;
+
+  if (/iPhone|iPod/i.test(userAgent)) {
+    return { label: "Open App Store", url: appStoreUrl };
+  }
+  if (/Android.*Mobile/i.test(userAgent)) {
+    return { label: "Open Play Store", url: playStoreUrl };
+  }
+  return null;
+};
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [mobileAppOpen, setMobileAppOpen] = useState(false);
+  const [phoneStore, setPhoneStore] = useState<{
+    label: string;
+    url: string;
+  } | null>(null);
   const ref = useRef<HTMLDivElement>(null);
   const tl = useRef<gsap.core.Timeline | null>(null);
   const speed = useRef(1);
@@ -85,19 +102,6 @@ const Navbar = () => {
           { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "power3.out" },
           0.35,
         )
-        // Globe pops in
-        .fromTo(
-          "[data-globe]",
-          { opacity: 0, scale: 0.4, rotate: -25 },
-          {
-            opacity: 1,
-            scale: 1,
-            rotate: 0,
-            duration: 0.8,
-            ease: "back.out(1.6)",
-          },
-          0.4,
-        )
         // Buttons + close slide up one after another
         .fromTo(
           "[data-item]",
@@ -162,6 +166,7 @@ const Navbar = () => {
 
           {open && !mobileAppOpen && (
             <button
+              data-close
               type="button"
               onClick={() => setOpen(false)}
               aria-label="Close menu"
@@ -208,15 +213,21 @@ const Navbar = () => {
                 open ? "" : "pointer-events-none"
               }`}
             >
-              {/* Animated globe */}
+              {/* Static globe artwork */}
               <div
-                data-globe
                 aria-hidden={mobileAppOpen}
-                className={`flex flex-1 min-h-0 items-center justify-center opacity-0 ${
+                className={`relative flex flex-1 min-h-0 w-full items-center justify-center overflow-hidden ${
                   mobileAppOpen ? "hidden" : ""
                 }`}
               >
-                <Globe active={open} />
+                <img
+                  src="/globe.png"
+                  alt=""
+                  width={7680}
+                  height={4068}
+                  decoding="async"
+                  className="absolute left-1/2 top-1/2 h-auto w-[40rem] max-w-none -translate-x-1/2 -translate-y-1/2 object-contain"
+                />
               </div>
 
               <div
@@ -237,7 +248,10 @@ const Navbar = () => {
                 <div data-item className="opacity-0">
                   <button
                     type="button"
-                    onClick={() => setMobileAppOpen(true)}
+                    onClick={() => {
+                      setPhoneStore(getPhoneStore());
+                      setMobileAppOpen(true);
+                    }}
                     tabIndex={tab}
                     className="w-full cursor-pointer rounded-full mono bg-[#ddd5cc] py-2.5 text-sm font-semibold text-black shadow-md whitespace-nowrap transition hover:brightness-105 active:scale-[0.98]"
                   >
@@ -252,26 +266,44 @@ const Navbar = () => {
                   >
                     Sign In
                   </button>
-
                 </div>
-                
               </div>
 
               {mobileAppOpen && (
-                <div className="flex flex-1 flex-col items-center justify-center gap-5">
-                  <QRCodeSVG
-                    value={mobileAppUrl}
-                    size={208}
-                    level="M"
-                    marginSize={4}
-                    title="QR code for the Velto mobile app page"
-                  />
+                <div className="flex flex-1 flex-col items-center justify-center gap-4">
+                  <div className="mt-2 text-center">
+                    <p className="flex items-center justify-center gap-1.5 text-xl font-semibold tracking-tight text-black">
+                      Get the{" "}
+                      <span className="inline-flex items-center gap-1 rounded-full border border-black/10 px-2 py-0.5 text-sm">
+                        <img
+                          src="/velto-icon.svg"
+                          className="size-5"
+                          alt=""
+                        />
+                        Velto
+                      </span>{" "}
+                      app
+                    </p>
+                  
+                  </div>
+                  {phoneStore ? (
+                    <a
+                      href={phoneStore.url}
+                      className="rounded-full bg-black px-6 py-3 text-sm font-semibold text-white transition active:scale-[0.98]"
+                    >
+                      {phoneStore.label}
+                    </a>
+                  ) : (
+                    <div className="rounded-[1.4rem] bg-white">
+                      <BrandedQRCode value={mobileAppUrl} size={208} />
+                    </div>
+                  )}
                   <button
                     type="button"
                     onClick={() => setMobileAppOpen(false)}
-                    className="mono cursor-pointer rounded-full border border-black/20 px-6 py-2 text-sm font-semibold text-black transition hover:bg-black/5 active:scale-[0.98]"
+                    className="cursor-pointer rounded-full bg-black px-6 py-2 text-sm font-semibold text-white transition active:scale-[0.98]"
                   >
-                    Cancel
+                    Close
                   </button>
                 </div>
               )}

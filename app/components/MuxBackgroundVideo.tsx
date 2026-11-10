@@ -49,6 +49,7 @@ type MuxBackgroundVideoProps = {
   playbackId: string;
   className: string;
   preload: "auto" | "metadata";
+  onCanPlay?: () => void;
   "data-experience-image"?: boolean;
 };
 
@@ -56,6 +57,7 @@ export default function MuxBackgroundVideo({
   playbackId,
   className,
   preload,
+  onCanPlay,
   "data-experience-image": isExperienceImage,
 }: MuxBackgroundVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -147,6 +149,7 @@ export default function MuxBackgroundVideo({
       loop
       playsInline
       preload={preload}
+      onCanPlay={onCanPlay}
     />
   );
 }
