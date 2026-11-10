@@ -90,7 +90,7 @@ export default function RevealScreen() {
           alt="Velto"
           width={46}
           height={36}
-          className="h-auto w-40 object-contain sm:w-10"
+          className="h-auto w-10 object-contain sm:w-10"
         />
        
       </div>
